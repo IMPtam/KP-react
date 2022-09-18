@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import api from "../api";
+import BookMark from "./bookmark";
+import SearchStatus from "./searchStatus";
+import User from "./user";
 
 const Users = () => {
   const [users, setUsers] = useState(api.users.fetchAll());
@@ -7,27 +10,18 @@ const Users = () => {
   const handleDelete = (userId) => {
     setUsers(users.filter((user) => user._id !== userId));
   };
-
-  const renderPhrase = (number) => {
-    const lastOne = Number(number.toString().slice(-1));
-    if (number > 4 && number < 15) return "человек тусанет";
-    if ([2, 3, 4].indexOf(lastOne) >= 0) return "человека тусанут";
-    if (lastOne === 1) return "человек тусанет";
-    return "человек тусанет";
+  const getClasses = () => {
+    const status = "bi bi-patch-check m-1";
+    return status;
   };
 
+  const handleBookMark = () => {
+    console.log("Изменяется иконка");
+  };
   return (
     <>
       <h2>
-        <span
-          className={"badge " + (users.length > 0 ? "bg-primary" : "bg-danger")}
-        >
-          {users.length > 0
-            ? `${
-                users.length + " " + renderPhrase(users.length)
-              } с тобой сегодня`
-            : "Никто с тобой не тусанет!"}
-        </span>
+        <SearchStatus length={users.length} />
       </h2>
 
       {users.length > 0 && (
@@ -39,6 +33,7 @@ const Users = () => {
               <th scope="col">Профессия</th>
               <th scope="col">Встретился, раз</th>
               <th scope="col">Оценка</th>
+              <th scope="col">Избранное</th>
               <th />
             </tr>
           </thead>
@@ -59,6 +54,12 @@ const Users = () => {
                 <td>{user.profession.name}</td>
                 <td>{user.completedMeetings}</td>
                 <td>{user.rate} /5</td>
+                <td>
+                  <button
+                    className={getClasses()}
+                    onClick={handleBookMark}
+                  ></button>
+                </td>
                 <td>
                   <button
                     onClick={() => handleDelete(user._id)}

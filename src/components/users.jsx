@@ -26,7 +26,7 @@ const Users = () => {
             ? `${
                 users.length + " " + renderPhrase(users.length)
               } с тобой сегодня`
-            : "Никто с тобой не тусанет"}
+            : "Никто с тобой не тусанет!"}
         </span>
       </h2>
 

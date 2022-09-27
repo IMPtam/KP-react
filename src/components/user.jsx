@@ -2,14 +2,7 @@ import React from "react";
 import Qualitie from "./qualitie";
 import BookMark from "./bookmark";
 
-const User = ({ user, onDelete }) => {
-  const handleBookMark = () => {
-    console.log("Изменяется иконка");
-  };
-  const getClasses = () => {
-    const status = "bi bi-patch-check m-1";
-    return status;
-  };
+const User = ({ user, onDelete, onBookMark }) => {
   return (
     <>
       <tr key={user._id}>
@@ -25,10 +18,7 @@ const User = ({ user, onDelete }) => {
         <td>{user.completedMeetings}</td>
         <td>{user.rate} /5</td>
         <td>
-          <BookMark
-            classBookMark={getClasses()}
-            onBookMark={handleBookMark}
-          ></BookMark>
+          <BookMark onBookMark={onBookMark} user={user}></BookMark>
         </td>
         <td>
           <button onClick={() => onDelete(user._id)} className="btn btn-danger">

@@ -8,7 +8,16 @@ const Users = () => {
   const handleDelete = (userId) => {
     setUsers(users.filter((user) => user._id !== userId));
   };
-
+  const handleBookMark = (id) => {
+    const array = users.map((user) => {
+      if (user._id === id) {
+        user.bookmark = !user.bookmark;
+        return user;
+      }
+      return user;
+    });
+    setUsers(array);
+  };
   return (
     <>
       <h2>
@@ -30,7 +39,12 @@ const Users = () => {
           </thead>
           <tbody>
             {users.map((user) => (
-              <User key={user.id} user={user} onDelete={handleDelete} />
+              <User
+                key={user._id}
+                user={user}
+                onDelete={handleDelete}
+                onBookMark={handleBookMark}
+              />
             ))}
           </tbody>
         </table>

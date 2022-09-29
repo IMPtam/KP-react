@@ -10,14 +10,6 @@ const User = ({ user, onDelete, onBookMark }) => {
                 <td>{user.name}</td>
                 <td>
                     <Qualitie user={user.qualities} />
-                    {/* {user.qualities.map((item) => (
-                        <span
-                            className={"badge m-1 bg-" + item.color}
-                            key={item._id}
-                        >
-                            {item.name}
-                        </span>
-                    ))} */}
                 </td>
                 <td>{user.profession.name}</td>
                 <td>{user.completedMeetings}</td>

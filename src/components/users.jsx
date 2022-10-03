@@ -7,7 +7,7 @@ import { paginate } from "../utils/pagination";
 import GroupList from "./groupList";
 
 const Users = () => {
-    const [users, setUsers] = useState(api.users.fetchAll());
+    const [users, setUsers] = useState();
     const [currentPage, SetCurrentPage] = useState(1);
     const [profession, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
@@ -30,6 +30,7 @@ const Users = () => {
     const pageSize = 2;
     useEffect(() => {
         console.log("Запрос на фейковый api");
+        api.users.fetchAll().then((data) => setUsers(data));
         api.professions.fetchAll().then((data) => setProfession(data));
     }, []);
     useEffect(() => {
@@ -38,11 +39,14 @@ const Users = () => {
     const handleProfessionSelect = (item) => {
         setSelectedProf(item);
     };
+
     const filteredUsers = selectedProf
-        ? users.filter((user) => user.profession === selectedProf)
+        ? users.filter((user) => user.profession._id === selectedProf)
         : users;
-    const count = filteredUsers.length;
-    const userCrop = paginate(filteredUsers, currentPage, pageSize);
+    const count = filteredUsers ? filteredUsers.length : 4;
+    const userCrop = filteredUsers
+        ? paginate(filteredUsers, currentPage, pageSize)
+        : users;
     const clearFilter = () => {
         setSelectedProf();
     };
@@ -64,44 +68,46 @@ const Users = () => {
                 </div>
             )}
 
-            <div className="d-flex flex-column">
-                <h2>
-                    <SearchStatus length={count} />
-                </h2>
-                {count > 0 && (
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Имя</th>
-                                <th scope="col">Качества</th>
-                                <th scope="col">Профессия</th>
-                                <th scope="col">Встретился, раз</th>
-                                <th scope="col">Оценка</th>
-                                <th scope="col">Избранное</th>
-                                <th />
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {userCrop.map((user) => (
-                                <User
-                                    key={user._id}
-                                    user={user}
-                                    onDelete={handleDelete}
-                                    onBookMark={handleBookMark}
-                                />
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-                <div className="d-flex justify-content-center">
-                    <Pagination
-                        itemCount={count}
-                        pageSize={pageSize}
-                        onPageChange={handlePageChange}
-                        currentPage={currentPage}
-                    />
+            {users && (
+                <div className="d-flex flex-column">
+                    <h2>
+                        <SearchStatus length={count} />
+                    </h2>
+                    {count > 0 && (
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Имя</th>
+                                    <th scope="col">Качества</th>
+                                    <th scope="col">Профессия</th>
+                                    <th scope="col">Встретился, раз</th>
+                                    <th scope="col">Оценка</th>
+                                    <th scope="col">Избранное</th>
+                                    <th />
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {userCrop.map((user) => (
+                                    <User
+                                        key={user._id}
+                                        user={user}
+                                        onDelete={handleDelete}
+                                        onBookMark={handleBookMark}
+                                    />
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                    <div className="d-flex justify-content-center">
+                        <Pagination
+                            itemCount={count}
+                            pageSize={pageSize}
+                            onPageChange={handlePageChange}
+                            currentPage={currentPage}
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

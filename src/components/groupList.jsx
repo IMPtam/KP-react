@@ -8,34 +8,53 @@ const GroupList = ({
     onItemSelect,
     selectedItem
 }) => {
-    const itemsType = Array.isArray(items) ? { ...[...items] } : items;
-
+    if (!Array.isArray(items)) {
+        return (
+            <ul className="list-group">
+                {Object.keys(items).map((item) => (
+                    <li
+                        key={items[item][valueProperty]}
+                        className={
+                            "list-group-item" +
+                            (items[item] === selectedItem ? " active" : "")
+                        }
+                        onClick={() => onItemSelect(items[item])}
+                        role="button"
+                    >
+                        {items[item][contentProperty]}
+                    </li>
+                ))}
+            </ul>
+        );
+    }
     return (
         <ul className="list-group">
-            {Object.keys(itemsType).map((item) => (
+            {items.map((item) => (
                 <li
+                    key={item[valueProperty]}
                     className={
                         "list-group-item" +
-                        (itemsType[item] === selectedItem ? " active" : "")
+                        (item === selectedItem ? " active" : "")
                     }
-                    key={itemsType[item][valueProperty]}
-                    onClick={() => onItemSelect(itemsType[item][valueProperty])}
+                    onClick={() => onItemSelect(item)}
+                    role="button"
                 >
-                    {itemsType[item][contentProperty]}
+                    {item[contentProperty]}
                 </li>
             ))}
         </ul>
     );
 };
 GroupList.defaultProps = {
-    contentProperty: "name",
-    valueProperty: "_id"
+    valueProperty: "_id",
+    contentProperty: "name"
 };
 GroupList.propTypes = {
     items: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     valueProperty: PropTypes.string.isRequired,
     contentProperty: PropTypes.string.isRequired,
     onItemSelect: PropTypes.func,
-    selectedItem: PropTypes.oneOfType([PropTypes.object, PropTypes.string])
+    selectedItem: PropTypes.object
 };
+
 export default GroupList;

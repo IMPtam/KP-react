@@ -2,15 +2,18 @@ import React, { useState, useEffect } from "react";
 import api from "../api";
 import Pagination from "./pagination";
 import SearchStatus from "./searchStatus";
-import User from "./user";
 import { paginate } from "../utils/pagination";
 import GroupList from "./groupList";
+import UserTable from "./userTable";
+import _ from "lodash";
 
 const Users = () => {
     const [users, setUsers] = useState();
     const [currentPage, SetCurrentPage] = useState(1);
     const [profession, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
+    const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
+
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
     };
@@ -23,29 +26,46 @@ const Users = () => {
         });
         setUsers(array);
     };
+    const handleSort = (item) => {
+        if (sortBy.iter === item) {
+            setSortBy((prevState) => ({
+                ...prevState,
+                order: prevState.order === "asc" ? "desc" : "asc"
+            }));
+        } else {
+            setSortBy({ iter: item, order: "asc" });
+        }
+    };
     const handlePageChange = (pageIndex) => {
         SetCurrentPage(pageIndex);
     };
 
-    const pageSize = 2;
+    const pageSize = 6;
     useEffect(() => {
         console.log("Запрос на фейковый api");
         api.users.fetchAll().then((data) => setUsers(data));
         api.professions.fetchAll().then((data) => setProfession(data));
     }, []);
+
     useEffect(() => {
         SetCurrentPage(1);
     }, [selectedProf]);
+
     const handleProfessionSelect = (item) => {
         setSelectedProf(item);
     };
 
     const filteredUsers = selectedProf
-        ? users.filter((user) => user.profession._id === selectedProf)
+        ? users.filter(
+              (user) =>
+                  JSON.stringify(user.profession) ===
+                  JSON.stringify(selectedProf)
+          )
         : users;
     const count = filteredUsers ? filteredUsers.length : 4;
-    const userCrop = filteredUsers
-        ? paginate(filteredUsers, currentPage, pageSize)
+    const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
+    const userCrop = sortedUsers
+        ? paginate(sortedUsers, currentPage, pageSize)
         : users;
     const clearFilter = () => {
         setSelectedProf();
@@ -74,29 +94,12 @@ const Users = () => {
                         <SearchStatus length={count} />
                     </h2>
                     {count > 0 && (
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Имя</th>
-                                    <th scope="col">Качества</th>
-                                    <th scope="col">Профессия</th>
-                                    <th scope="col">Встретился, раз</th>
-                                    <th scope="col">Оценка</th>
-                                    <th scope="col">Избранное</th>
-                                    <th />
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {userCrop.map((user) => (
-                                    <User
-                                        key={user._id}
-                                        user={user}
-                                        onDelete={handleDelete}
-                                        onBookMark={handleBookMark}
-                                    />
-                                ))}
-                            </tbody>
-                        </table>
+                        <UserTable
+                            users={userCrop}
+                            handleDelete={handleDelete}
+                            handleBookMark={handleBookMark}
+                            onSort={handleSort}
+                        />
                     )}
                     <div className="d-flex justify-content-center">
                         <Pagination

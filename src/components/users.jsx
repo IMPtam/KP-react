@@ -27,14 +27,7 @@ const Users = () => {
         setUsers(array);
     };
     const handleSort = (item) => {
-        if (sortBy.iter === item) {
-            setSortBy((prevState) => ({
-                ...prevState,
-                order: prevState.order === "asc" ? "desc" : "asc"
-            }));
-        } else {
-            setSortBy({ iter: item, order: "asc" });
-        }
+        setSortBy(item);
     };
     const handlePageChange = (pageIndex) => {
         SetCurrentPage(pageIndex);
@@ -42,7 +35,6 @@ const Users = () => {
 
     const pageSize = 6;
     useEffect(() => {
-        console.log("Запрос на фейковый api");
         api.users.fetchAll().then((data) => setUsers(data));
         api.professions.fetchAll().then((data) => setProfession(data));
     }, []);
@@ -55,40 +47,43 @@ const Users = () => {
         setSelectedProf(item);
     };
 
-    const filteredUsers = selectedProf
-        ? users.filter(
-              (user) =>
-                  JSON.stringify(user.profession) ===
-                  JSON.stringify(selectedProf)
-          )
-        : users;
-    const count = filteredUsers ? filteredUsers.length : 4;
-    const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
-    const userCrop = sortedUsers
-        ? paginate(sortedUsers, currentPage, pageSize)
-        : users;
-    const clearFilter = () => {
-        setSelectedProf();
-    };
-    return (
-        <div className="d-flex">
-            {profession && (
-                <div className="d-flex flex-column flex-shrink-0 p-3">
-                    <GroupList
-                        selectedItem={selectedProf}
-                        items={profession}
-                        onItemSelect={handleProfessionSelect}
-                    />
-                    <button
-                        className="btn btn-danger mt-2"
-                        onClick={clearFilter}
-                    >
-                        Очистить
-                    </button>
-                </div>
-            )}
+    if (users) {
+        const filteredUsers = selectedProf
+            ? users.filter(
+                  (user) =>
+                      JSON.stringify(user.profession) ===
+                      JSON.stringify(selectedProf)
+              )
+            : users;
+        const count = filteredUsers.length;
+        const sortedUsers = _.orderBy(
+            filteredUsers,
+            [sortBy.path],
+            [sortBy.order]
+        );
+        const userCrop = paginate(sortedUsers, currentPage, pageSize);
 
-            {users && (
+        const clearFilter = () => {
+            setSelectedProf();
+        };
+        return (
+            <div className="d-flex">
+                {profession && (
+                    <div className="d-flex flex-column flex-shrink-0 p-3">
+                        <GroupList
+                            selectedItem={selectedProf}
+                            items={profession}
+                            onItemSelect={handleProfessionSelect}
+                        />
+                        <button
+                            className="btn btn-danger mt-2"
+                            onClick={clearFilter}
+                        >
+                            Очистить
+                        </button>
+                    </div>
+                )}
+                (
                 <div className="d-flex flex-column">
                     <h2>
                         <SearchStatus length={count} />
@@ -96,9 +91,10 @@ const Users = () => {
                     {count > 0 && (
                         <UserTable
                             users={userCrop}
-                            handleDelete={handleDelete}
-                            handleBookMark={handleBookMark}
+                            onDelete={handleDelete}
+                            onBookMark={handleBookMark}
                             onSort={handleSort}
+                            selectedSort={sortBy}
                         />
                     )}
                     <div className="d-flex justify-content-center">
@@ -110,9 +106,11 @@ const Users = () => {
                         />
                     </div>
                 </div>
-            )}
-        </div>
-    );
+                )
+            </div>
+        );
+    }
+    return "Загрузка...";
 };
 
 export default Users;

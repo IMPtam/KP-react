@@ -12,8 +12,10 @@ const Users = () => {
     const [currentPage, SetCurrentPage] = useState(1);
     const [profession, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
-    const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
-
+    const [sortBy, setSortBy] = useState({
+        iter: "name",
+        order: "asc"
+    });
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
     };
@@ -83,7 +85,7 @@ const Users = () => {
                         </button>
                     </div>
                 )}
-                (
+
                 <div className="d-flex flex-column">
                     <h2>
                         <SearchStatus length={count} />
@@ -106,7 +108,6 @@ const Users = () => {
                         />
                     </div>
                 </div>
-                )
             </div>
         );
     }

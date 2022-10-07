@@ -2,6 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const TableHeader = ({ onSort, selectedSort, columns }) => {
+    // const [sortIcon, setSortIcon] = useState(" ");
+    // useEffect(() => {
+    //     console.log("нажал");
+    //     if (selectedSort.path) setSortIcon("bi bi-caret-down-fill");
+    // }, [selectedSort]);
     const handleSort = (item) => {
         if (selectedSort.path === item) {
             onSort({
@@ -12,12 +17,26 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
             onSort({ path: item, order: "asc" });
         }
     };
+    const handleIcon = () => {
+        if (selectedSort.order === "asc") {
+            return "bi bi-caret-down-fill";
+        } else {
+            return "bi bi-caret-up-fill";
+        }
+    };
     return (
         <thead>
             <tr>
                 {Object.keys(columns).map((column) => (
                     <th
                         key={column}
+                        className={
+                            selectedSort.path === columns[column].path &&
+                            columns[column].path
+                                ? handleIcon()
+                                : ""
+                        }
+                        // {...{ className: columns[column].path && sortIcon }}
                         onClick={
                             columns[column].path
                                 ? () => handleSort(columns[column].path)
@@ -37,6 +56,7 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
 TableHeader.propTypes = {
     onSort: PropTypes.func.isRequired,
     selectedSort: PropTypes.object.isRequired,
-    columns: PropTypes.object.isRequired
+    columns: PropTypes.object.isRequired,
+    sortIcon: PropTypes.string
 };
 export default TableHeader;

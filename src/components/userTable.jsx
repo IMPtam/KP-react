@@ -9,7 +9,10 @@ import Table from "./table";
 
 const UserTable = ({ users, selectedSort, onBookMark, onSort, onDelete }) => {
     const columns = {
-        name: { path: "name", name: "Имя" },
+        name: {
+            path: "name",
+            name: "Имя"
+        },
         qualities: {
             name: "Качества",
             component: (user) => <Qualitie user={user.qualities} />

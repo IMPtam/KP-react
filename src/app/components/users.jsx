@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import api from "../api";
+import api from "../../api";
 import Pagination from "./pagination";
 import SearchStatus from "./searchStatus";
-import { paginate } from "../utils/pagination";
+import { paginate } from "../../utils/pagination";
 import GroupList from "./groupList";
 import UserTable from "./userTable";
 import _ from "lodash";
@@ -35,7 +35,7 @@ const Users = () => {
         SetCurrentPage(pageIndex);
     };
 
-    const pageSize = 6;
+    const pageSize = 8;
     useEffect(() => {
         api.users.fetchAll().then((data) => setUsers(data));
         api.professions.fetchAll().then((data) => setProfession(data));

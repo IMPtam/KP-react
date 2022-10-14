@@ -1,8 +1,8 @@
 import React from "react";
 // import User from "./user";
 import PropTypes from "prop-types";
-import TableHeader from "./tableHeader";
-import TableBody from "./tableBody";
+// import TableHeader from "./tableHeader";
+// import TableBody from "./tableBody";
 import BookMark from "./bookmark";
 import Qualitie from "./qualitie";
 import Table from "./table";
@@ -44,6 +44,7 @@ const UserTable = ({ users, selectedSort, onBookMark, onSort, onDelete }) => {
             )
         }
     };
+
     return (
         <Table
             onSort={onSort}
@@ -51,8 +52,8 @@ const UserTable = ({ users, selectedSort, onBookMark, onSort, onDelete }) => {
             columns={columns}
             data={users}
         >
-            <TableHeader {...{ onSort, selectedSort, columns }} />
-            <TableBody {...{ columns, data: users }} />
+            {/* <TableHeader {...{ onSort, selectedSort, columns }} />
+            <TableBody {...{ columns, data: users }} /> */}
         </Table>
     );
 };

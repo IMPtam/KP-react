@@ -6,16 +6,19 @@ import { paginate } from "../../utils/pagination";
 import GroupList from "./groupList";
 import UserTable from "./userTable";
 import _ from "lodash";
+// import SearchUsers from "./searchUser";
 
 const Users = () => {
     const [users, setUsers] = useState();
     const [currentPage, SetCurrentPage] = useState(1);
+    const [search, setSearch] = useState("");
     const [profession, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({
         iter: "name",
         order: "asc"
     });
+
     const handleDelete = (userId) => {
         setUsers(users.filter((user) => user._id !== userId));
     };
@@ -43,9 +46,16 @@ const Users = () => {
 
     useEffect(() => {
         SetCurrentPage(1);
-    }, [selectedProf]);
+    }, [selectedProf, search]);
 
+    const handleSearch = ({ target }) => {
+        setSelectedProf(undefined);
+        setSearch(target.value);
+    };
     const handleProfessionSelect = (item) => {
+        if (search !== "") {
+            setSearch("");
+        }
         setSelectedProf(item);
     };
 
@@ -56,8 +66,11 @@ const Users = () => {
                       JSON.stringify(user.profession) ===
                       JSON.stringify(selectedProf)
               )
+            : search
+            ? users.filter((user) => user.name.includes(search) === true)
             : users;
         const count = filteredUsers.length;
+
         const sortedUsers = _.orderBy(
             filteredUsers,
             [sortBy.path],
@@ -89,6 +102,19 @@ const Users = () => {
                 <div className="d-flex flex-column">
                     <h2>
                         <SearchStatus length={count} />
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Поиск..."
+                                name="search"
+                                onChange={handleSearch}
+                                value={search}
+                            />
+                        </div>
+                        {/* <SearchUsers
+                            users={users}
+                            onChangeForm={handleChangeForm}
+                        /> */}
                     </h2>
                     {count > 0 && (
                         <UserTable

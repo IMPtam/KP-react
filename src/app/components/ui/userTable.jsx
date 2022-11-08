@@ -3,9 +3,9 @@ import React from "react";
 import PropTypes from "prop-types";
 // import TableHeader from "./tableHeader";
 // import TableBody from "./tableBody";
-import BookMark from "./bookmark";
+import BookMark from "../common/bookmark";
 import Qualitie from "./qualitie";
-import Table from "./table";
+import Table from "../common/table";
 
 const UserTable = ({ users, selectedSort, onBookMark, onSort, onDelete }) => {
     const columns = {

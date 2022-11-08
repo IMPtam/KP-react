@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import api from "../../api";
-import { useHistory } from "react-router-dom";
+import api from "../../../../api";
+import { useHistory, useLocation } from "react-router-dom";
 
 const UserPage = ({ id }) => {
     const [curentUser, setCurentUser] = useState();
-    api.users.getById(id).then((data) => setCurentUser(data));
+    useEffect(() => {
+        api.users.getById(id).then((data) => setCurentUser(data));
+    }, []);
+
     const history = useHistory();
+    const loc = useLocation();
     const handlePage = () => {
-        history.replace("/users");
+        history.push(`${loc.pathname}/edit`);
     };
     if (curentUser) {
         return (
@@ -33,7 +37,7 @@ const UserPage = ({ id }) => {
                     className="btn btn-info ms-2 mt-4"
                     onClick={() => handlePage()}
                 >
-                    Все пользователи
+                    Изменить
                 </button>
             </div>
         );

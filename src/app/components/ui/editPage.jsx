@@ -28,7 +28,9 @@ const EditPage = ({ id }) => {
     const history = useHistory();
 
     const handleSubmit = (e) => {
-        console.log(e);
+        // console.log(id);
+        // console.log(data);
+
         api.users.update(id, data).then((data) => setData(data));
         e.preventDefault();
         history.push(`/users/${id}`);
@@ -36,6 +38,7 @@ const EditPage = ({ id }) => {
         // const isValid = validate();
         // if (!isValid) return;
     };
+
     if (data) {
         return (
             <form onSubmit={handleSubmit}>

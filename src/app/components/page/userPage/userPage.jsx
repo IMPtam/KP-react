@@ -25,9 +25,9 @@ const UserPage = ({ id }) => {
                     {curentUser.qualities.map((item) => (
                         <span
                             className={"badge m-1 bg-" + item.color}
-                            key={item._id}
+                            key={item._id || item.value}
                         >
-                            {item.name}
+                            {item.name || item.label}
                         </span>
                     ))}
                 </div>

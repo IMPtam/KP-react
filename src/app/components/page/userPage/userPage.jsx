@@ -14,6 +14,9 @@ const UserPage = ({ id }) => {
     const handlePage = () => {
         history.push(`${loc.pathname}/edit`);
     };
+    // const handlePage = () => {
+    //     history.push(history.location.pathname + "/edit");
+    // };
     if (curentUser) {
         return (
             <div className="ms-3">

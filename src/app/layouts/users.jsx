@@ -10,9 +10,7 @@ const Users = () => {
     return (
         <>
             {postId ? (
-                <>
-                    {edit ? <EditPage id={postId} /> : <UserPage id={postId} />}
-                </>
+                <>{edit ? <EditPage /> : <UserPage id={postId} />}</>
             ) : (
                 <UsersListPage />
             )}

@@ -86,7 +86,7 @@ const RegisterForm = () => {
                 value: 8
             }
         },
-        profession: {
+        professions: {
             isRequied: { message: "Обязательно заполните Вашу профессию" }
         },
         license: {
@@ -138,7 +138,7 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 defaultOption="...Выберите"
                 options={professions}
-                error={errors.profession}
+                error={errors.professions}
             />
             <RadioField
                 label="Выберите свой пол"

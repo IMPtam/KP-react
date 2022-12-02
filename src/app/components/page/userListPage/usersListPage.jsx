@@ -20,6 +20,7 @@ const UsersListPage = () => {
         order: "asc"
     });
     const { users } = useUser();
+
     // useEffect(() => {
     //     api.users.fetchAll().then((data) => setUsers(data));
     // }, []);

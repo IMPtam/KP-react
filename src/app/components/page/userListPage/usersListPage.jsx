@@ -6,10 +6,11 @@ import { paginate } from "../../../../utils/pagination";
 import GroupList from "../../common/groupList";
 import UserTable from "../../ui/userTable";
 import _ from "lodash";
+import { useUser } from "../../../hooks/useUser";
 // import SearchUsers from "./searchUser";
 
 const UsersListPage = () => {
-    const [users, setUsers] = useState();
+    // const [users, setUsers] = useState();
     const [currentPage, SetCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
     const [profession, setProfession] = useState();
@@ -18,11 +19,13 @@ const UsersListPage = () => {
         iter: "name",
         order: "asc"
     });
-    useEffect(() => {
-        api.users.fetchAll().then((data) => setUsers(data));
-    }, []);
+    const { users } = useUser();
+    // useEffect(() => {
+    //     api.users.fetchAll().then((data) => setUsers(data));
+    // }, []);
     const handleDelete = (userId) => {
-        setUsers(users.filter((user) => user._id !== userId));
+        // setUsers(users.filter((user) => user._id !== userId));
+        console.log(userId);
     };
     const handleBookMark = (id) => {
         const array = users.map((user) => {
@@ -31,7 +34,8 @@ const UsersListPage = () => {
             }
             return user;
         });
-        setUsers(array);
+        // setUsers(array);
+        console.log(array);
     };
     const handleSort = (item) => {
         setSortBy(item);
@@ -42,7 +46,7 @@ const UsersListPage = () => {
 
     const pageSize = 8;
     useEffect(() => {
-        api.users.fetchAll().then((data) => setUsers(data));
+        // api.users.fetchAll().then((data) => setUsers(data));
         api.professions.fetchAll().then((data) => setProfession(data));
     }, []);
 

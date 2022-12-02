@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import api from "../../../../api";
+// import api from "../../../../api";
 // import { useHistory, useLocation } from "react-router-dom";
 import UserCard from "../../ui/UserCard";
 import QualitiesCard from "../../ui/qualitiesCard";
 import MeetingsCard from "../../ui/meetingsCard";
 import Comments from "../../ui/comments";
+import { useUser } from "../../../hooks/useUser";
 
 const UserPage = ({ id }) => {
-    const [curentUser, setCurentUser] = useState();
-    useEffect(() => {
-        api.users.getById(id).then((data) => setCurentUser(data));
-    }, []);
-
+    // const [curentUser, setCurentUser] = useState();
+    const { users } = useUser();
+    const curentUser = users.find((user) => user._id === id);
     // const history = useHistory();
     // const loc = useLocation();
     // const handlePage = () => {

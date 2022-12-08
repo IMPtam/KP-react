@@ -7,10 +7,8 @@ import GroupList from "../../common/groupList";
 import UserTable from "../../ui/userTable";
 import _ from "lodash";
 import { useUser } from "../../../hooks/useUser";
-// import SearchUsers from "./searchUser";
 
 const UsersListPage = () => {
-    // const [users, setUsers] = useState();
     const [currentPage, SetCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
     const [profession, setProfession] = useState();
@@ -20,12 +18,7 @@ const UsersListPage = () => {
         order: "asc"
     });
     const { users } = useUser();
-
-    // useEffect(() => {
-    //     api.users.fetchAll().then((data) => setUsers(data));
-    // }, []);
     const handleDelete = (userId) => {
-        // setUsers(users.filter((user) => user._id !== userId));
         console.log(userId);
     };
     const handleBookMark = (id) => {
@@ -35,7 +28,6 @@ const UsersListPage = () => {
             }
             return user;
         });
-        // setUsers(array);
         console.log(array);
     };
     const handleSort = (item) => {
@@ -47,7 +39,6 @@ const UsersListPage = () => {
 
     const pageSize = 8;
     useEffect(() => {
-        // api.users.fetchAll().then((data) => setUsers(data));
         api.professions.fetchAll().then((data) => setProfession(data));
     }, []);
 

@@ -44,15 +44,6 @@ const UserCard = ({ curentUser }) => {
                         </div>
                     </div>
                 </div>
-
-                <div>{`Количество встреч: ${curentUser.completedMeetings}`}</div>
-
-                {/* <button
-                    className="btn btn-info ms-2 mt-4"
-                    onClick={() => handlePage()}
-                >
-                    Изменить
-                </button>{" "} */}
             </div>
         </div>
     );

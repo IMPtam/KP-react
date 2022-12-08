@@ -1,24 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useQualities } from "../../hooks/useQualities";
+import Qualities from "./qualities";
 
 const QualitiesCard = ({ data }) => {
-    const { getQualities } = useQualities();
-    const quality = getQualities(data);
     return (
         <div className="card mb-3">
             <div className="card-body d-flex flex-column justify-content-center text-center">
-                <h5 className="card-title">Качества</h5>
+                <h5 className="card-title">
+                    <span>Качества</span>
+                </h5>
                 <p className="card-text">
-                    {" "}
-                    {quality.map((item) => (
-                        <span
-                            className={"badge m-1 bg-" + item.color}
-                            key={item._id || item.value}
-                        >
-                            {item.name || item.label}
-                        </span>
-                    ))}
+                    <Qualities qualities={data} />
                 </p>
             </div>
         </div>

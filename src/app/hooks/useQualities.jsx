@@ -21,9 +21,9 @@ export const QualityProvider = ({ children }) => {
             setError(null);
         }
     }, [error]);
-    function getQualities(id) {
-        return id.map((qual) => qualities.find((q) => q._id === qual));
-    }
+    const getQuality = (id) => {
+        return qualities.find((q) => q._id === id);
+    };
 
     async function getQualityList() {
         try {
@@ -39,7 +39,7 @@ export const QualityProvider = ({ children }) => {
         setError(message);
     }
     return (
-        <QualityContex.Provider value={{ isLoading, qualities, getQualities }}>
+        <QualityContex.Provider value={{ isLoading, qualities, getQuality }}>
             {children}
         </QualityContex.Provider>
     );

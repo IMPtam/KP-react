@@ -7,16 +7,11 @@ import QualitiesCard from "../../ui/qualitiesCard";
 import MeetingsCard from "../../ui/meetingsCard";
 import Comments from "../../ui/comments";
 import { useUser } from "../../../hooks/useUser";
+import { CommentsProvider } from "../../../hooks/useComments";
 
 const UserPage = ({ id }) => {
-    // const [curentUser, setCurentUser] = useState();
-    const { users } = useUser();
-    const curentUser = users.find((user) => user._id === id);
-    // const history = useHistory();
-    // const loc = useLocation();
-    // const handlePage = () => {
-    //     history.push(`${loc.pathname}/edit`);
-    // };
+    const { getUserById } = useUser();
+    const curentUser = getUserById(id);
 
     if (curentUser) {
         return (
@@ -28,7 +23,9 @@ const UserPage = ({ id }) => {
                         <MeetingsCard value={curentUser.completedMeetings} />
                     </div>
                     <div className="col-md-8">
-                        <Comments />
+                        <CommentsProvider>
+                            <Comments />
+                        </CommentsProvider>
                     </div>
                 </div>
             </div>

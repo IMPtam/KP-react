@@ -180,9 +180,9 @@ const RegisterForm = () => {
             <RadioField
                 label="Выберите свой пол"
                 options={[
-                    { name: "Мужчина", value: "Муж" },
-                    { name: "Женщина", value: "Жен" },
-                    { name: "Другой", value: "Другой" }
+                    { name: "Мужчина", value: "male" },
+                    { name: "Женщина", value: "female" },
+                    { name: "Другой", value: "other" }
                 ]}
                 value={data.sex}
                 name="sex"

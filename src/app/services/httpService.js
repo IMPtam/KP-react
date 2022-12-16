@@ -38,6 +38,7 @@ http.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+
 function transForm(data) {
     return data && !data._id
         ? Object.keys(data).map((key) => ({ ...data[key] }))
@@ -63,6 +64,7 @@ http.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
 const httpService = {
     get: http.get,
     post: http.post,

@@ -13,21 +13,17 @@ const Users = () => {
     return (
         <UserProvider>
             {postId ? (
-                <>
-                    {edit ? (
-                        onlineUser._id === postId ? (
-                            <EditPage />
-                        ) : (
-                            <Redirect
-                                to={{
-                                    pathname: `/users/${onlineUser._id}/edit`
-                                }}
-                            />
-                        )
+                edit === "edit" ? (
+                    onlineUser._id === postId ? (
+                        <EditPage />
                     ) : (
-                        <UserPage id={postId} />
-                    )}
-                </>
+                        <Redirect
+                            to={{ pathname: `/users/${onlineUser._id}/edit` }}
+                        />
+                    )
+                ) : (
+                    <UserPage id={postId} />
+                )
             ) : (
                 <UsersListPage />
             )}

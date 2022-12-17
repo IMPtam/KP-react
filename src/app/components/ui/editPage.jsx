@@ -58,7 +58,6 @@ const EditPage = () => {
     }
     useEffect(() => {
         setIsLoading(true);
-        console.log(data);
         updateData();
     }, []);
 
@@ -117,7 +116,7 @@ const EditPage = () => {
     };
     const isValid = Object.keys(errors).length === 0;
 
-    if (!isLoading && data.qualities && data.profession) {
+    if (!isLoading) {
         return (
             <div className="container mt-5">
                 <BackHistoryButton />

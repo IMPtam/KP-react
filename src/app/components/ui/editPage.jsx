@@ -44,10 +44,11 @@ const EditPage = () => {
         }));
         return data;
     };
-    function updateData() {
+
+    useEffect(() => {
+        setIsLoading(true);
         if (!professionLoading && !qualityLoading) {
-            setData((prevState) => ({
-                ...prevState,
+            setData(() => ({
                 profession: prof._id,
                 qualities: transformData(onlineUser.qualities),
                 name: onlineUser.name,
@@ -55,11 +56,7 @@ const EditPage = () => {
                 sex: onlineUser.sex
             }));
         }
-    }
-    useEffect(() => {
-        setIsLoading(true);
-        updateData();
-    }, []);
+    }, [professionLoading, qualityLoading]);
 
     const getQual = (qual) => {
         console.log(qual);
@@ -116,7 +113,7 @@ const EditPage = () => {
     };
     const isValid = Object.keys(errors).length === 0;
 
-    if (!isLoading) {
+    if (data && !isLoading) {
         return (
             <div className="container mt-5">
                 <BackHistoryButton />

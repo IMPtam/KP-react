@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import { useHistory, useParams } from "react-router-dom";
 import { validator } from "../../../utils/validator";
-// import api from "../../../api";
 import TextField from "../common/form/textField";
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
@@ -10,10 +8,10 @@ import BackHistoryButton from "../common/backButton";
 import { useAuth } from "../../hooks/useAuth";
 import { useProfession } from "../../hooks/useProfession";
 import { useQualities } from "../../hooks/useQualities";
+import { useHistory } from "react-router-dom";
 
 const EditPage = () => {
-    // const { postId } = useParams();
-    // const history = useHistory();
+    const history = useHistory();
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState({
         name: "",
@@ -22,8 +20,7 @@ const EditPage = () => {
         sex: "male",
         qualities: []
     });
-
-    const { onlineUser } = useAuth();
+    const { onlineUser, modifyUser } = useAuth();
     const {
         isLoading: professionLoading,
         professions,
@@ -34,12 +31,10 @@ const EditPage = () => {
         label: p.name,
         value: p._id
     }));
-
     const { isLoading: qualityLoading, qualities, getQuality } = useQualities();
-
     const qualityList = qualities.map((q) => ({
-        label: q.name,
-        value: q._id
+        value: q._id,
+        label: q.name
     }));
     const [errors, setErrors] = useState({});
 
@@ -49,86 +44,54 @@ const EditPage = () => {
             const quality = getQuality(qualityId);
             qualitiesArray.push(quality);
         }
-        return qualitiesArray.map((q) => ({
+        data = qualitiesArray.map((q) => ({
             label: q.name,
             value: q._id
         }));
+        return data;
     };
+    function updateData() {
+        if (!professionLoading && !qualityLoading) {
+            setData((prevState) => ({
+                ...prevState,
+                ...data,
+                profession: prof._id,
+                qualities: transformData(onlineUser.qualities),
+                name: onlineUser.name,
+                email: onlineUser.email,
+                sex: onlineUser.sex
+            }));
+        }
+    }
     useEffect(() => {
         setIsLoading(true);
-        setData((prevState) => ({
-            ...prevState,
-            ...data,
-            profession: prof._id,
-            qualities: transformData(onlineUser.qualities),
-            name: onlineUser.name,
-            email: onlineUser.email,
-            sex: onlineUser.sex
-        }));
+        updateData();
     }, []);
-    // const getQualities = (elements) => {
-    //     const qualitiesArray = [];
-    //     for (const elem of elements) {
-    //         for (const quality in qualities) {
-    //             if (elem.value === qualities[quality].value) {
-    //                 qualitiesArray.push({
-    //                     _id: qualities[quality].value,
-    //                     name: qualities[quality].label,
-    //                     color: qualities[quality].color
-    //                 });
-    //             }
-    //         }
-    //     }
-    //     return qualitiesArray;
-    // };
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(data);
-        // const isValid = validate();
-        // if (!isValid) return;
-        // const { qualities } = data;
-        // api.users
-        //     .update(postId, {
-        //         ...data,
-        //         // profession: getProfessionById(profession),
-        //         qualities: getQualities(qualities)
-        //     })
-        //     .then((data) => history.push(`/users/${data._id}`));
+
+    const getQual = (qual) => {
+        console.log(qual);
+        return qual.map((q) => q.value);
     };
 
-    // useEffect(() => {
-    //     setIsLoading(true);
-    //     setData((prevState) => ({
-    //         ...prevState,
-    //         profession: prof.name
-    //     }));
-    // api.users.getById(postId).then(({ profession, qualities, ...data }) =>
-    //     setData((prevState) => ({
-    //         ...prevState,
-    //         ...data,
-    //         qualities: transformData(qualities),
-    //         profession: profession._id
-    //     }))
-    // );
-    // api.professions.fetchAll().then((data) => {
-    //     const professionsList = Object.keys(data).map((professionName) => ({
-    //         label: data[professionName].name,
-    //         value: data[professionName]._id
-    //     }));
-    //     setProfession(professionsList);
-    // });
-    // api.qualities.fetchAll().then((data) => {
-    //     const qualitiesList = Object.keys(data).map((optionName) => ({
-    //         value: data[optionName]._id,
-    //         label: data[optionName].name,
-    //         color: data[optionName].color
-    //     }));
-    //     setQualities(qualitiesList);
-    // });
-    // }, []);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const isValid = validate();
+        if (!isValid) return;
+        const { qualities } = data;
+        try {
+            modifyUser({
+                ...data,
+                _id: onlineUser._id,
+                qualities: getQual(qualities)
+            });
+            history.push(`/users/${onlineUser._id}`);
+        } catch (error) {
+            setErrors(error);
+        }
+    };
+
     useEffect(() => {
         if (data) setIsLoading(false);
-        console.log(data);
     }, [data]);
 
     const validatorConfig = {
@@ -162,16 +125,15 @@ const EditPage = () => {
     };
     const isValid = Object.keys(errors).length === 0;
 
-    if (!professionLoading && !qualityLoading) {
+    if (!isLoading) {
         return (
             <div className="container mt-5">
                 <BackHistoryButton />
                 <div className="container mt-2">
                     <div className="row">
                         <div className="col-md-8 offset-md-2 shadow p-4">
-                            {!isLoading &&
-                            Object.keys(professions).length > 0 &&
-                            Object.keys(qualities).length > 0 ? (
+                            {Object.keys(data.qualities).length > 0 &&
+                            Object.keys(professions).length > 0 ? (
                                 <form onSubmit={handleSubmit}>
                                     <TextField
                                         label="Имя"

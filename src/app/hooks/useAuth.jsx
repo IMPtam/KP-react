@@ -93,7 +93,14 @@ const AuthProvider = ({ children }) => {
             }
         }
     }
-
+    async function modifyUser(data) {
+        try {
+            const { content } = await userServices.patch(data);
+            console.log(content);
+        } catch (error) {
+            errorCather(error);
+        }
+    }
     async function createUser(data) {
         try {
             const { content } = await userServices.create(data);
@@ -131,7 +138,9 @@ const AuthProvider = ({ children }) => {
         setError(message);
     }
     return (
-        <AuthContext.Provider value={{ signUp, signIn, onlineUser, logOut }}>
+        <AuthContext.Provider
+            value={{ signUp, signIn, onlineUser, logOut, modifyUser }}
+        >
             {!isLoading ? children : "Загрузка..."}
         </AuthContext.Provider>
     );

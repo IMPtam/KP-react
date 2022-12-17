@@ -12,7 +12,6 @@ import { useHistory } from "react-router-dom";
 
 const EditPage = () => {
     const history = useHistory();
-    const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState({});
     const { onlineUser, modifyUser } = useAuth();
     const {
@@ -46,7 +45,6 @@ const EditPage = () => {
     };
 
     useEffect(() => {
-        setIsLoading(true);
         if (!professionLoading && !qualityLoading) {
             setData(() => ({
                 profession: prof._id,
@@ -82,7 +80,6 @@ const EditPage = () => {
 
     useEffect(() => {
         validate();
-        if (data) setIsLoading(false);
     }, [data]);
 
     const validatorConfig = {
@@ -113,7 +110,7 @@ const EditPage = () => {
     };
     const isValid = Object.keys(errors).length === 0;
 
-    if (data && !isLoading) {
+    if (data.qualities) {
         return (
             <div className="container mt-5">
                 <BackHistoryButton />

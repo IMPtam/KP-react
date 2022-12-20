@@ -12,7 +12,7 @@ import { useHistory } from "react-router-dom";
 
 const EditPage = () => {
     const history = useHistory();
-    const [data, setData] = useState({});
+    const [data, setData] = useState();
     const { onlineUser, modifyUser } = useAuth();
     const {
         isLoading: professionLoading,
@@ -78,10 +78,6 @@ const EditPage = () => {
         }
     };
 
-    useEffect(() => {
-        validate();
-    }, [data]);
-
     const validatorConfig = {
         email: {
             isRequired: {
@@ -97,6 +93,9 @@ const EditPage = () => {
             }
         }
     };
+    useEffect(() => {
+        validate();
+    }, [data]);
     const handleChange = (target) => {
         setData((prevState) => ({
             ...prevState,

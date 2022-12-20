@@ -96,7 +96,7 @@ const AuthProvider = ({ children }) => {
     async function modifyUser(data) {
         try {
             const { content } = await userServices.patch(data);
-            console.log(content);
+            setUser(content);
         } catch (error) {
             errorCather(error);
         }

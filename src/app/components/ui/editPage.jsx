@@ -110,7 +110,7 @@ const EditPage = () => {
     };
     const isValid = Object.keys(errors).length === 0;
 
-    if (data.qualities) {
+    if (data) {
         return (
             <div className="container mt-5">
                 <BackHistoryButton />

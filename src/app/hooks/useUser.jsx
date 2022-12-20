@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import userServices from "../services/userServices";
 
 import { toast } from "react-toastify";
+import { useAuth } from "./useAuth";
 
 const UserContext = React.createContext();
 
@@ -11,11 +12,14 @@ export const useUser = () => {
 };
 const UserProvider = ({ children }) => {
     const [users, setUsers] = useState([]);
+    const { onlineUser } = useAuth();
+    console.log(onlineUser);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     useEffect(() => {
         getUser();
     }, []);
+
     useEffect(() => {
         if (error !== null) {
             toast(error);
@@ -31,6 +35,17 @@ const UserProvider = ({ children }) => {
             errorCather(error);
         }
     }
+    useEffect(() => {
+        if (!isLoading) {
+            const newUser = [...users];
+            const userIndex = newUser.findIndex(
+                (el) => el._id === onlineUser._id
+            );
+            console.log(userIndex);
+            newUser[userIndex] = onlineUser;
+            setUsers(newUser);
+        }
+    }, [onlineUser]);
     function errorCather(error) {
         const { message } = error.response.data;
         setError(message);

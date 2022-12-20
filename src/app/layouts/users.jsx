@@ -17,9 +17,7 @@ const Users = () => {
                     onlineUser._id === postId ? (
                         <EditPage />
                     ) : (
-                        <Redirect
-                            to={{ pathname: `/users/${onlineUser._id}/edit` }}
-                        />
+                        <Redirect to={`/users/${onlineUser._id}/edit`} />
                     )
                 ) : (
                     <UserPage id={postId} />

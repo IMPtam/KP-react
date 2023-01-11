@@ -13,7 +13,7 @@ export const useUser = () => {
 const UserProvider = ({ children }) => {
     const [users, setUsers] = useState([]);
     const { onlineUser } = useAuth();
-    console.log(onlineUser);
+
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     useEffect(() => {

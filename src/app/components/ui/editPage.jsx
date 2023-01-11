@@ -6,42 +6,68 @@ import RadioField from "../common/form/radioField";
 import MultySelectField from "../common/form/multySelectField";
 import BackHistoryButton from "../common/backButton";
 import { useAuth } from "../../hooks/useAuth";
-import { useProfession } from "../../hooks/useProfession";
-import { useQualities } from "../../hooks/useQualities";
 import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getQualities, getQualitiesLoadingStatus } from "../../store/qualities";
+import {
+    getProfessionByIds,
+    getProfessionLoadingStatus,
+    getProffesions
+} from "../../store/proffesions";
 
 const EditPage = () => {
     const history = useHistory();
     const [data, setData] = useState();
     const { onlineUser, modifyUser } = useAuth();
-    const {
-        isLoading: professionLoading,
-        professions,
-        getProfession
-    } = useProfession();
-    const prof = getProfession(onlineUser.profession);
+
+    const professionLoading = useSelector(getProfessionLoadingStatus());
+    const professions = useSelector(getProffesions());
+    const prof = useSelector(getProfessionByIds(onlineUser.profession));
+
     const professionList = professions.map((p) => ({
         label: p.name,
         value: p._id
     }));
-    const { isLoading: qualityLoading, qualities, getQuality } = useQualities();
+
+    const qualities = useSelector(getQualities());
+    const qualityLoading = useSelector(getQualitiesLoadingStatus());
+
     const qualityList = qualities.map((q) => ({
         value: q._id,
         label: q.name
     }));
     const [errors, setErrors] = useState({});
 
-    const transformData = (data) => {
+    // const transformData = (data) => {
+    //     const qualitiesArray = [];
+    //     for (const qualityId of data) {
+    //         const quality = getQuality(qualityId);
+    //         qualitiesArray.push(quality);
+    //     }
+    //     data = qualitiesArray.map((q) => ({
+    //         label: q.name,
+    //         value: q._id
+    //     }));
+    //     return data;
+    // };
+    function getQualitiesListByIds(qualitiesIds) {
         const qualitiesArray = [];
-        for (const qualityId of data) {
-            const quality = getQuality(qualityId);
-            qualitiesArray.push(quality);
+        for (const qualId of qualitiesIds) {
+            for (const quality of qualities) {
+                if (quality._id === qualId) {
+                    qualitiesArray.push(quality);
+                    break;
+                }
+            }
         }
-        data = qualitiesArray.map((q) => ({
-            label: q.name,
-            value: q._id
+        return qualitiesArray;
+    }
+    const transformData = (data) => {
+        const result = getQualitiesListByIds(data).map((qual) => ({
+            label: qual.name,
+            value: qual._id
         }));
-        return data;
+        return result;
     };
 
     useEffect(() => {

@@ -13,7 +13,7 @@ const Users = () => {
     return (
         <UserProvider>
             {postId ? (
-                edit ? (
+                edit === "edit" ? (
                     onlineUser._id === postId ? (
                         <EditPage />
                     ) : (

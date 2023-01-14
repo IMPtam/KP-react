@@ -3,21 +3,23 @@ import { Redirect, useParams } from "react-router-dom";
 import UserPage from "../components/page/userPage";
 import UsersListPage from "../components/page/userListPage";
 import EditPage from "../components/ui/editPage";
-import UserProvider from "../hooks/useUser";
-import { useAuth } from "../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getOnlineUserId } from "../store/users";
+import UsersLoader from "../components/ui/HOC/usersLoader";
 
 const Users = () => {
     const params = useParams();
-    const { onlineUser } = useAuth();
     const { postId, edit } = params;
+    const onlineUserId = useSelector(getOnlineUserId());
+
     return (
-        <UserProvider>
+        <UsersLoader>
             {postId ? (
                 edit === "edit" ? (
-                    onlineUser._id === postId ? (
+                    onlineUserId === postId ? (
                         <EditPage />
                     ) : (
-                        <Redirect to={`/users/${onlineUser._id}/edit`} />
+                        <Redirect to={`/users/${onlineUserId}/edit`} />
                     )
                 ) : (
                     <UserPage id={postId} />
@@ -25,7 +27,7 @@ const Users = () => {
             ) : (
                 <UsersListPage />
             )}
-        </UserProvider>
+        </UsersLoader>
     );
 };
 

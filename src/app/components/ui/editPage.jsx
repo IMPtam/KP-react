@@ -5,21 +5,23 @@ import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultySelectField from "../common/form/multySelectField";
 import BackHistoryButton from "../common/backButton";
-import { useAuth } from "../../hooks/useAuth";
+
 import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getQualities, getQualitiesLoadingStatus } from "../../store/qualities";
 import {
     getProfessionByIds,
     getProfessionLoadingStatus,
     getProffesions
 } from "../../store/proffesions";
+import { getOnlineUserData, modifyUser } from "../../store/users";
 
 const EditPage = () => {
     const history = useHistory();
+    console.log(history);
     const [data, setData] = useState();
-    const { onlineUser, modifyUser } = useAuth();
-
+    const onlineUser = useSelector(getOnlineUserData());
+    const dispatch = useDispatch();
     const professionLoading = useSelector(getProfessionLoadingStatus());
     const professions = useSelector(getProffesions());
     const prof = useSelector(getProfessionByIds(onlineUser.profession));
@@ -37,19 +39,6 @@ const EditPage = () => {
         label: q.name
     }));
     const [errors, setErrors] = useState({});
-
-    // const transformData = (data) => {
-    //     const qualitiesArray = [];
-    //     for (const qualityId of data) {
-    //         const quality = getQuality(qualityId);
-    //         qualitiesArray.push(quality);
-    //     }
-    //     data = qualitiesArray.map((q) => ({
-    //         label: q.name,
-    //         value: q._id
-    //     }));
-    //     return data;
-    // };
     function getQualitiesListByIds(qualitiesIds) {
         const qualitiesArray = [];
         for (const qualId of qualitiesIds) {
@@ -77,31 +66,29 @@ const EditPage = () => {
                 qualities: transformData(onlineUser.qualities),
                 name: onlineUser.name,
                 email: onlineUser.email,
-                sex: onlineUser.sex
+                sex: onlineUser.sex,
+                image: onlineUser.image
             }));
         }
     }, [professionLoading, qualityLoading]);
 
     const getQual = (qual) => {
-        console.log(qual);
         return qual.map((q) => q.value);
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
         const { qualities } = data;
-        try {
-            await modifyUser({
+        dispatch(
+            modifyUser({
                 ...data,
                 _id: onlineUser._id,
                 qualities: getQual(qualities)
-            });
-            history.push(`/users/${onlineUser._id}`);
-        } catch (error) {
-            setErrors(error);
-        }
+            })
+        );
+        history.push(`/users/${onlineUser._id}`);
     };
 
     const validatorConfig = {

@@ -1,13 +1,17 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
-import { useAuth } from "../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getOnlineUserData } from "../../store/users";
+import history from "../../../utils/histore";
 
 const UserCard = ({ curentUser }) => {
-    const history = useHistory();
-    const { onlineUser } = useAuth();
+    // const history = useHistory();
+
+    const onlineUser = useSelector(getOnlineUserData());
     const handlePage = () => {
-        history.push(history.location.pathname + "/edit");
+        const redirect = `${history.location.pathname}` + "/edit";
+        history.push(redirect);
     };
     return (
         <div className="card mb-3">

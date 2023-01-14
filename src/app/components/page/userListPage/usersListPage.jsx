@@ -5,13 +5,12 @@ import { paginate } from "../../../../utils/pagination";
 import GroupList from "../../common/groupList";
 import UserTable from "../../ui/userTable";
 import _ from "lodash";
-import { useUser } from "../../../hooks/useUser";
-import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import {
     getProfessionLoadingStatus,
     getProffesions
 } from "../../../store/proffesions";
+import { getOnlineUserId, getUsersList } from "../../../store/users";
 
 const UsersListPage = () => {
     const [currentPage, SetCurrentPage] = useState(1);
@@ -24,8 +23,9 @@ const UsersListPage = () => {
         iter: "name",
         order: "asc"
     });
-    const { users } = useUser();
-    const { onlineUser } = useAuth();
+
+    const users = useSelector(getUsersList());
+    const onlineUserId = useSelector(getOnlineUserId());
     const handleDelete = (userId) => {
         console.log(userId);
     };
@@ -71,7 +71,7 @@ const UsersListPage = () => {
             : search
             ? data.filter((user) => user.name.includes(search) === true)
             : data;
-        return filteredUsers.filter((u) => u._id !== onlineUser._id);
+        return filteredUsers.filter((u) => u._id !== onlineUserId);
     }
     const filteredUsers = filterUsers(users);
     const count = filteredUsers.length;

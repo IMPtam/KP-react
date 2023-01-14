@@ -3,7 +3,7 @@ import httpService from "./httpService";
 const commentEndPoint = "comment/";
 
 const commentServices = {
-    createComment: async (payload) => {
+    createComments: async (payload) => {
         const { data } = await httpService.put(
             commentEndPoint + payload._id,
             payload
@@ -19,8 +19,10 @@ const commentServices = {
         });
         return data;
     },
-    removeComment: async (commentId) => {
+    removeComments: async (commentId) => {
+        console.log("commentService-", commentId);
         const { data } = await httpService.delete(commentEndPoint + commentId);
+        console.log("commentService-", data);
         return data;
     }
 };
